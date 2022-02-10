@@ -1,0 +1,86 @@
+Causation vs Correlation (Association)
+
+COVID Vaccine
+
+Causal: Taking the vaccine gives protection against Covid
+
+Correlation (Association): The vaccine doesn't help at all. It's just that the people who took it were healthier or more caucious.
+
+
+
+
+EXAMPLES:
+
+Rainy days & lots of people coming to school with umbrellas
+
+Not that umbrellas cause rainy days but that rainy days cause people to bring umbrellas. (there is always some sort of tempral relationship)
+
+
+
+Sleeping with shoes on & waking up with a headache.
+(explanatory)				(response)
+
+The Confounder (a 3rd variable that is associative with both the explanatory and response variables) in this case it is if the person went to bed drunk or not.
+
+
+=======================================================================
+
+2 Types of studies
+
+	Experiments (randomized trial) : Studies where the researcher 			controls who gets the explanatory var
+
+	ex. T Trials (can establish causality)
+
+
+	vs 
+
+
+
+	Observational Studies (Cohort) : Studies in which the researcher observes but they never intervine.
+
+	ex. Pediatric HIV/Aids cohort study (can not establish causality)
+
+=======================================================================
+
+
+
+
+							 ----- (Treatment)
+(POP)-----SRS------(SAMPLE)-k
+			|				------- (no treatment) (second level of)
+			|										(Randomization)
+			|								(to prevent cofounding vars)
+		(1st level of randomization
+		Generalizability )
+
+
+
+
+=======================================================================
+
+Clinical Trials:
+
+			Control Group:
+				- Placebo
+				- Standard-of-care Group
+
+
+			Blinding:
+				-Single (study particiment not aware of which group they are in)
+
+				-Double: (researchers dont know what group the participants are in either when evaluating them)
+
+=======================================================================
+
+
+Observational Studies:
+
+
+Why not always use clinical trial:
+	- Ethics
+	- Expensive 
+	- Time consuming
+	- Inability to randomize treatment
+	- Focused on one Question
+	- Lots of data exists 
+
