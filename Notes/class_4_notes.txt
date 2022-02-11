@@ -1,0 +1,58 @@
+Categorical Variables.
+
+Ex: Which dining hall do cold students prefer 3 levels (Dana, Bobs, Foss)
+
+
+
+Frequency (one-way table) DANA| Bobs | Foss
+			  6     12     6     (number of counts of each choice)
+			(25%) (50%)  (25%)   (can also giver percentages of)
+
+
+
+
+TYPES OF PLOTS FOR SINGLE CATEGORICAL VARIABLE:
+		1. Bar Plot(Bar Chart) (MUCH preferred over pie charts)
+			
+		2. Pie Chart (REALLY BAD TRY NOT TO USE)
+
+
+
+
+EX (2 categorical variables) Do diets differ b/t Colby and Bates students.
+	The explanatory variable is what school you go to. 
+	The response variable is a diet
+
+
+	USE a 2 way table
+	
+			Diet
+		meat   Veg   V
+College	Colby.   142.   77.  31
+	Bates.   50.    20.   5
+
+Bates n = 75
+Colby n = 250
+
+There are different ways to propoqtinalize here since the sample sizes of each group are different.
+Can divide by total sample.
+
+	Row proportions (amoung each college the proportions)
+	Col proportions (proportions amount different diet type. Sample sizes)
+	Total Proportions (total sample size)
+
+Proportions can be better for plotting bar charts with different proportion sizes.
+
+
+
+What % of Colby student prefer Foss?
+
+P = population
+
+^
+P (p hat) = sample statistic in this case = # who prefer foss \ n =100 (which is the sample size)
+
+
+
+
+
