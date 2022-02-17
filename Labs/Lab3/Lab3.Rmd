@@ -1,0 +1,470 @@
+---
+title: "SC212: Lab 3"
+output: html_document
+urlcolor: blue
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+----
+
+**New `R` Commands:**
+
+- `read.csv()`: reads a .csv file and creates a data frame
+- `hist()`: creates a histogram of a numeric variable
+- `boxplot()`: creates boxplots of a numeric variable
+- `barplot()`: creates bar chart of a categorical variable
+- `table()`: creates table of counts for one or two categorical variables
+- `prop.table()`: converts counts to proportions in tables created from `table()` function
+- `ggplot()`: initializes the process of creating a plot with the `ggplot2` package
+- `aes()`: defines aesthetics for a plot for `ggplot()`. Set the x and y variables, set colors and groups, etc.)
+- `geom_PLOT()`: defines the plot of plot by replacing `PLOT` with something (e.g., `geom_histogram()` creates a histogram). Can also set other options here if necessary.
+
+
+**Additional Information:**
+
+- Use `$` to access variables within a dataset. That is, `dat$var1` will output the variable named `var1` from the dataset named `dat`.
+- You can make data visualizations in either base `R` or with the `ggplot2` package.
+- The `ggplot2` package has a steeper learning curve but can produce more attractive plots out of the box.
+- However, every plot you make (particularly for the project) no matter what package you use will require some tweaks: changing labels, adding a title, etc.
+
+
+---
+
+**Objectives**
+
+1. Load and examine dataset from book.
+2. Practice producing plots for one and two variables.
+3. Learn to use the `ggplot2` package to construct more complex graphs.
+
+---
+
+## Introduction
+
+One of the first things you should do when you obtain a dataset is to examine the data through *both* summary statistics (e.g., mean, median, range) and graphical displays. Often datasets are so large that you couldn't possibly go through each case individually. For the rest of this lab, we will focus on producing meaningful summaries of data.
+
+## Obtaining Numerical and Graphical Summaries
+
+Load the `NutritionStudy` file from the `Lock5Data` package. We will do so in the next code chunk.
+
+```{r load-data}
+library(Lock5Data)
+data("NutritionStudy")
+```
+
+This dataset contains data on 315 patients undergoing elective surgery. Among the collected data are personal characteristics, dietary habits, and plasma concentrations of retinol, beta-carotene, and other cartenoids. Once you've loaded the dataset, you can examine its structure with the function `str()`, which will give you names of the variables, what types they are, and the first few values of each.
+
+Another useful summarizing function in `R` is the `summary()` function, which gives you the five-number study for an individual variable (or for each variable in the dataset if you don't specify one). Let's try this ourselves. 
+
+```{r}
+str(NutritionStudy)
+summary(NutritionStudy)
+```
+
+In the following part of the lab, we're going to focus on displaying a single quantitative variable.
+
+### Plots for a Single Quantitative Variable
+
+**1a.** In the blank code chunk below, generate a 5-number summary for *just* the variable `Age`.
+
+```{r}
+summary(NutritionStudy$Age)
+```
+
+**1b.** Use the blank code chunk below to find the mean and the median for the variable `Cholesterol`. What do the mean and the median tell you about the shape of the distribution of this variable?
+
+```{r}
+print("The mean for Cholesterol is :") 
+mean(NutritionStudy$Cholesterol)
+print("The median for Cholesterol is :") 
+median(NutritionStudy$Cholesterol)
+```
+
+**Answer:**
+
+Since the mean is greater than the meadian this tells me that the Cholestoral 
+data is most likely skewed to the right.
+
+**1c.** Use the command `hist()` to view the distribution of the `Cholesterol` variable. Is it symmetric, right-skewed, or left-skewed? Does this confirm what you wrote as part of Q1b.
+
+```{r}
+hist(NutritionStudy$Cholesterol)
+```
+
+From this histogram this does confirm what I was thinking in the first part of the question that the Nutritional Study Cholesterol data would be skewed to the right
+
+
+**1d.** `R` automatically chooses bin sizes for the histogram. If you want to change them you can use the breaks option. For example, we could set the breaks for the Age variable with `hist(NutritionStudy$Age, breaks = c(10, 20, 30, 40, 50, 60, 70, 80, 90))`. Do the same with the `Cholesterol` variable putting breaks at 0, 200, 400, 600, 800, 1000.
+
+```{r}
+hist(NutritionStudy$Cholesterol,
+     breaks = c(0, 200, 400, 600, 800, 1000))
+```
+
+**1e.** Usually it's easier to read histograms if the y-axis displays probabilities rather than counts. You can achieve this with the hist() function by adding the options "freq = FALSE". Recreate the histogram in **1d** and include the "freq = FALSE" option.
+
+```{r}
+hist(NutritionStudy$Cholesterol,
+     breaks = c(0, 200, 400, 600, 800, 1000),
+     freq = FALSE)
+```
+
+**1f.** Box plots in `R` are generated with the `boxplot()` command. Make a box plot of the variable `Cholesterol`, taking care to title your graph appropriately.
+
+```{r}
+boxplot(NutritionStudy$Cholesterol, 
+        main = "Boxplot of NutritionStudy$Cholesterol",
+        ylab = "NutritionStudy$Cholesterol",
+        xlab = "All Cases")
+```
+
+
+
+Note that you should always label your axes and title your graph when producing a plot that someone else is going to see (including your lecture professors). If you're just making a throwaway graph to quickly check something, it's not necessary.
+
+### Plots for a Single Categorical Variable
+
+Box plots and histograms work great with quantitative variables. What if we had a categorical variable? A bar chart is often the best graphical solution. **While a bar chart can look similar to a histogram, they are not the same.** The variable Smoke is a categorical variable with levels "Yes" and "No". Let's make a table and a bar chart.
+
+```{r smoke-summary}
+table(NutritionStudy$Smoke)
+barplot(main = "Barchart of People Who Do and Don't Smoke",
+        ylab = "Number Of People",
+        xlab = "Do You Smoke?",
+        table(NutritionStudy$Smoke))
+```
+
+
+
+**2a.** Note we could achieve the same thing more elegantly with the following code. While you're examining this code, add a title to the bar chart (`main = TITLE HERE`) and label the x-axis (`xlab = X-AXIS LABEL HERE`) appropriately. 
+
+
+```{r}
+smoke.table <- table(NutritionStudy$Smoke)
+barplot(main = "Barchart of People Who Do and Don't Smoke",
+        ylab = "Number Of People",
+        xlab = "Do You Smoke?",
+        smoke.table) ## add an appropriate title and a label for x-axis here
+```
+**2b.** To get proportions rather than counts, we can wrap our frequency table `smoke.table` with the `prop.table()` function.
+
+```{r}
+prop.table(smoke.table)
+
+barplot(main = "Barchart of People Who Do and Don't Smoke",
+        ylab = "Proportion Of People",
+        xlab = "Smoke",
+        prop.table(smoke.table)) 
+```
+
+
+## Two-variable plots
+
+Rather than looking at *just* one variable, we often want to know how two variable are related, if at all. We can start to learn about relationships between variables by putting two variables in the same plot. Choosing an appropriate plot starts with identifying the types of variables you have.
+
+- Both X and Y are categorical:
+  + Side-by-side or stacked bar chart
+  + Mosaic plot
+- Both X and Y are numeric:
+  + Scatterplot
+- X is categorical and Y is numeric:
+  + Side-by-side boxplots
+  
+### Two Categorical Variables
+  
+**3a.** To produce a two-way table in `R`, we again use the `table()` command, but we include two categorical separated by a comma (e.g., `table(dataset$var1, dataset$var2)`). In the `NutritionStudy` dataset, the variables `VitaminUse` and `Sex` are categorical. In the code chunk below, create a two-way table with those two variables, saving the table with the name `my.table`. After saving the table, print the table using the `print()` command.
+
+```{r}
+ vitamin.sex.table <- table(NutritionStudy$VitaminUse,
+                            NutritionStudy$Sex)
+
+print(vitamin.sex.table)
+
+```
+
+**3b.** A mosaic plot is one way to visualize the relationship between two categorical variables. Use the `mosaicplot()` function to make a plot in the code chunk below with the code `mosaicplot(my.table, color = c("DarkOrange", "DarkBlue"))`.
+
+```{r}
+
+
+mosaicplot(vitamin.sex.table, 
+           color = c("DarkOrange", "DarkBlue"),
+           main = "Gender Makeup of Each Vitamin Use Categorey")
+```
+
+**3c.** In addition to mosaic plots, we can also produce side-by-side bar charts. Use the command `barplot(my.table, legend=TRUE, beside=TRUE)` in the code chunk below.
+
+```{r}
+
+barplot(vitamin.sex.table,
+        legend = TRUE,
+        beside = TRUE,
+        main = "Vitamin Use Between The Sexes",
+        ylab = "Case Count",
+        xlab ="Sex",
+        border = "Dark Blue")
+```
+
+For additional improvements to this plot, you can see all the options by checking the help page by typing `?barplot` in the console and hitting enter. At the bottom of *most* help pages are plenty of examples that you can try yourself.
+
+### Explanatory Variable is Categorical, Response is Numeric
+
+**4.** We've create side-by-side boxplots before, but let's do it again with the `boxplot()` command. We do so with the code `boxplot(dataset$NUMERICVAR ~ dataset$CATVAR)`. Create side-by-side boxplots in the code chunk below using the variables `Cholesterol` and `VitaminUse`.
+
+```{r}
+
+boxplot(NutritionStudy$Cholesterol ~ NutritionStudy$VitaminUse,
+        main = "Bar Plots of Cholestoral Consumed Over Different Vitamin Use Groups",
+        ylab = 'Cholesterol Consumed (mg per day)',
+        xlab = "Vitamin Use")
+
+```
+
+ 
+### Both Variables are Numeric
+
+When both variables are numeric, we can produce a scatterplot. The easiest way to do this is with the `plot()` function. We'll use the variables `Cholesterol` and `Age`.
+
+**5a.** Which of these is the explanatory and which is the response?
+
+**Answer:** `Age` (the subjects age) is the explanatory variable and `Cholesterol` (the subjects daily cholesterol intake) is the response variable
+
+**5b.** With the `plot()` function, the explanatory (x) variable comes first, followed by the response (y) variable, and any options you'd like. For example, `plot(dataset$XVAR, dataset$YBAR, main = 'title', xlab = 'x-label', ylab = 'y-label')`. Use the code chunk below to plot `Cholesterol` and `Age` in a scatterplot, appropriately titling the plot and labeling your axes.
+
+```{r}
+plot(NutritionStudy$Age,NutritionStudy$Cholesterol,
+     main = "Age vs Cholesterol Consumed (mg per day)",
+     xlab = "Age",
+     ylab = "Cholesterol Consumed (mg per day)",
+     col = '#1B9E77')
+    
+```
+
+
+## Creating good looking graphics with the `ggplot2` package
+
+The `R` package `ggplot2` is a popular set of graphing tools that make more attractive graphics out-of-the-box than base `R`. There is a bit of a learning curve but you'll start to notice patterns quickly and be able to implement them in your own work. First, load the package.
+
+```{r load-gg}
+library(ggplot2)
+```
+
+Every ggplot command has three critical parts:
+
+1. The dataset containing the variables of interest.
+2. An aesthetic which states your `x` and `y` variables (if needed for your particular plot) along with some other options.
+3. A plot type, which `ggplot2` calls a `geom`. For example, the `geom` for a histogram is just `geom_histogram`.
+
+We'll see how these three elements work together to make nice plots right now.
+
+### One-way (single variable) plots in `ggplot2`
+
+Let's start by creating a simple histogram of the `Cholesterol` variable from the `NutritionStudy` dataset. We can do this with the following code:
+
+```{r chol-hist}
+ggplot(NutritionStudy, aes(x = Cholesterol)) + geom_histogram()
+```
+
+Let's look more closely at this function call. The main function is called `ggplot()` and it's first argument is the dataset `NutritionStudy`. Next, we specify the aesthetic. Here, we only have one variable we need so within the `aes()` function, we set `x = Cholesterol`. We close the `ggplot()` call and then add a new layer --- in this case, it's what kind of plot we wanted. So we add `+ geom_histogram()` for a histogram. If you wanted a different kind of figure, you would just use a different plot type like `geom_point()` or `geom_dotplot()` or `geom_line()`. Note that some of these might need you to alter the `aes()` part and you may get an error or nonsense if the aesthetic doesn't match the type of plot you want.
+
+Additionally, we could have specified options within the function `geom_histogram()`. `R` automatically chooses the bins if you don't specify them, but if we want, we can specify bins for our histogram.
+
+```{r choose-bins}
+ggplot(NutritionStudy, aes(x = Cholesterol)) + geom_histogram(binwidth = 50)
+```
+
+Let's move on to the exercises.
+
+**6a.** Instead of specifying bin width, you can just choose a number of bins with the options `bins = `. In the code chunk below, create a histogram (using `ggplot`) of the variable `Cholesterol` with the option `bins = 10` replacing the `binwidth = 50` option.
+
+```{r}
+ggplot(NutritionStudy, aes(x = Cholesterol)) + geom_histogram(bins = 10)
+```
+
+**6b.** You can add attributes (like titles, labels, etc.) by using a `+` sign and appropriate commands at the end. For example,
+
+
+```{r, eval=FALSE, echo=TRUE}
+ggplot(NutritionStudy, aes(x = Cholesterol)) + 
+   geom_histogram(binwidth = 50) +
+   ggtitle("A Fancy Title") + xlab("X-axis label") +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+Note how the `+` comes at the *end* of each line you wish to continue. This lets `R` know there's more to come.
+
+Try adding titles to your graph in **6a** to the code chunk below.
+
+```{r}
+ggplot(NutritionStudy, aes(x = Cholesterol)) + 
+   geom_histogram(binwidth = 50) +
+   ggtitle("Cholesterol Consumed Distribution Over Data") + 
+  xlab("Cholesterol Consumed (mg per day)") +
+  ylab("Count")+
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+**6c.** To display the distribution of a categorical variable, we no longer use histograms with `geom_hist()`, but rather bar charts with `geom_bar()`. Try using `ggplot` to create a bar chart for the variable `VitaminUse`. You can add color to the plot in `geom_bar()` with `geom_bar(fill = "blue")`.
+
+```{r}
+ggplot(NutritionStudy, aes(x = VitaminUse)) + 
+   geom_bar(fill = "Blue") +
+   ggtitle("Vitamin Use Distribution") + 
+  xlab("Vitamin Use Groups") +
+  ylab("Count")+
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+**6d.** Lastly, we can make bar charts (using `ggplot()`) show proportions with some non-intuitive code. Repeat the code from question **6c** except use `geom_bar(aes(y = ..prop.., group = 1), fill = "blue")` in place of `geom_bar(fill = "blue")`.
+
+```{r}
+ggplot(NutritionStudy, aes(x = VitaminUse)) + 
+   geom_bar(aes(y = ..prop.., group = 1), fill = "blue")+
+   ggtitle("Vitamin Use Distribution") + 
+  xlab("Vitamin Use Groups") +
+  ylab("Proportion")+
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+`ggplot` is very flexible but take some time to learn. You can get examples by taking advantage of the help files in `R` (e.g., `?geom_bar` in the console). Alternatively, you can look at the `Data Visualization Cheat Sheet` by clicking `Help` on the task bar then `Cheat Sheets` and choosing the `ggplot` one.
+
+### Two-way (two variable) plots in `ggplot2`
+
+It's important to consider variable type (categorical or quantitative) when creating plots with two variables. When both variables are categorical, we can create segmented bar charts or side-by-side bar charts.
+
+Look at the plot below:
+
+```{r}
+ggplot(NutritionStudy, aes(x=VitaminUse, fill=Smoke)) + geom_bar(position="fill")+
+  ylab("Proportion") + 
+  xlab("Vitamin Use")+
+  ggtitle("Distribution Between Smokers and Non-Smokers in Each Vitamin Group")+
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+
+**7a.** Looking at the plot above, is there a relationship between `VitaminUse` and `Smoke`? Is this what you would have expected prior to looking at the data?
+
+Yes there appears to be a relationship that those people who don't take vitamins are more likley to smoke than those that sometimes take vitamins, and there is even less of a chance that someone smokes if they regularly take vitamins. There appears to be and inverse relationship between if you smoke and take vitamins. This makes sense because people that smoke care less about their health than people who don't smoke and taking vitamins is also another way to try and stay healthy so both might come from a confounding variable of how healthy the person tries to live.
+
+**Answer:**
+
+We can also show the same information in a side-by-side bar chart using the command:
+
+```{r}
+ggplot(NutritionStudy, aes(x=VitaminUse, fill=Smoke)) + geom_bar(position="dodge")+
+  ylab("Proportion") + 
+  xlab("Vitamin Use")+
+  ggtitle("Distribution Between Smokers and Non-Smokers in Each Vitamin Group")+
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+**7b.** Is one of the above plots better than the other (hint: yes)?  Which one?  Why?
+
+**Answer:** I would say that the first plot is because it shows the proprtainal distribution between the different vitamin groups which accounts for varying counts over the different vitamin groups and puts every group in the same scale. The proportion of smokers in each group is a much more useful stat to visualize than the count of each group.
+
+We can also do side-by-side boxplots in `ggplot`. For example,
+
+```{r}
+ggplot(NutritionStudy, aes(x=VitaminUse, y=Cholesterol)) + geom_boxplot() + 
+  ylab("Cholesterol Consumed (mg per day)") + 
+  xlab("Vitamin Use")+
+  ggtitle("Distribution of Cholesterol Consumed Over Different Vitamin Groups")+
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+
+**7c.** Instead of `geom_boxplot()` try using `geom_jitter()` in the code chunk below.
+
+```{r}
+ggplot(NutritionStudy, aes(x=VitaminUse, y=Cholesterol)) + geom_jitter() + 
+  ylab("Cholesterol Consumed (mg per day)") + 
+  xlab("Vitamin Use")+
+  ggtitle("Distribution of Cholesterol Consumed Over Different Vitamin Groups")+
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+**7d.** In many cases, we can overlay different types of plots. In the code chunk below, try using *both* `geom_boxplot()` and `geom_jitter()` in the same plot.
+
+```{r}
+ggplot(NutritionStudy, aes(x=VitaminUse, y=Cholesterol)) + geom_boxplot() + 
+  geom_jitter(col = "blue")+
+  ylab("Cholesterol Consumed (mg per day)") + 
+  xlab("Vitamin Use")+
+  ggtitle("Distribution of Cholesterol Consumed Over Different Vitamin Groups")+
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+My note: Can see jitter and boxplot show the same outlier dots
+
+
+We can also created side-by-side (or aligned) histograms with `ggplot` if we have one categorical variable and one quantitative variable. This is achieved with "faceting". An example of the needed code is:
+
+```{r eval=FALSE}
+ggplot(NutritionStudy, aes(x=Cholesterol, fill=VitaminUse)) + geom_histogram() +
+  facet_wrap(~VitaminUse, ncol=1)+
+  xlab("Cholesterol Consumed (mg per day)")+
+  ggtitle("Distribution of Cholesterol Consumed Between Different Vitamin Groups")+
+  guides(fill=guide_legend(title="Vitamin Use"))
+```
+
+**7e.** In the code chunk below, create side-by-side histograms to show the distribution of `Cholesterol` by `Smoke`.
+
+```{r}
+ggplot(NutritionStudy, aes(x=Cholesterol, fill=Smoke)) + geom_histogram() +
+  facet_wrap(~Smoke, ncol=1)+
+  xlab("Cholesterol Consumed (mg per day)")+
+  ggtitle("Distribution of Cholesterol Consumed Between Smokers and Non-Smokers")+
+  guides(fill=guide_legend(title="Person that Smoke"))
+
+```
+
+
+**7f.** Lastly create a scatterplot of `Cholesterol` and `Age`. Use `geom_point()` as well as what you've learned so far to create the plot in the code chunk below.
+
+```{r}
+ggplot(NutritionStudy, aes(x=Age, y=Cholesterol)) + 
+  geom_point()+
+  ylab("Cholesterol Consumed (mg per day)") + 
+  xlab("Age (years")+
+  ggtitle("Age vs Cholesterol Consumed")+
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+
+### Multi-way plots in `ggplot`
+
+We can combine the ideas above to create plots of more than 2 variables! For example, we can use color to use subgroups in a scatterplot. 
+**8a.**
+
+```{r}
+ggplot(NutritionStudy, aes(x=Age, y=Cholesterol, color=Sex)) + 
+  geom_point( alpha = 0.5)+
+  ylab("Cholesterol Consumed (mg per day)") + 
+  xlab("Age (years)")+
+  ggtitle("Age vs Cholesterol Consumed")+
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+
+**8b.**
+
+```{r}
+ggplot(NutritionStudy, aes(x=Age, y=Cholesterol, color=Sex)) + 
+  geom_point( alpha = 0.5, size = rel(0.7))+
+  ylab("Cholesterol Consumed (mg per day)") + 
+  xlab("Age (years)")+
+  ggtitle("Age vs Cholesterol Consumed \n Between Sex and Vitamin Use ")+
+  theme(plot.title = element_text(hjust = 1.2,size = 8))+
+  facet_wrap(~VitaminUse, labeller = label_both)+
+  guides(fill=guide_legend(title="Vitamin Use"))
+
+```
+
+## Last Note on `ggplot` and plots
+
+There are a lot of resources available on making good plots. We have a book posted on our Moodle page. There's a `ggplot` cheat sheet available from RStudio. You can also find solutions by simply googling "How do I make a ... with ggplot?"
+
+Regardless of whether you use `ggplot` or the base `R` commands, it is important that your plots are readable, well-labeled, and informative.
